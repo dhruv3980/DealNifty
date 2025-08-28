@@ -1,0 +1,38 @@
+import express from "express";
+import { reqisterUser, loginUser, logoutUser, requestPasswordToken, resetPassword, getUserDetails, changePassword, updateUserProfile, getALLUserDetails, getSingleUserDetails, chaneUserRole, deleteUser, createreview, getAllreviews, deleteReview } from "../controllers/Usercontroller.js";
+import { Authorization, roleBasedAccess } from "../middlewares/Authorizationmiddleware.js";
+
+const router = express.Router();
+
+router.route('/registeruser').post(reqisterUser)
+router.route('/login-user').post(loginUser)
+router.route('/logout-user').post(logoutUser)
+router.route('/password/forgot').get(requestPasswordToken)
+
+router.route('/reset/:token').post(resetPassword)
+router.route('/profile').get(Authorization,getUserDetails)
+router.route('/password/update').post(Authorization,changePassword)
+router.route('/update/profile').post(Authorization, updateUserProfile)
+
+
+router.route('/admin/users').get(Authorization, roleBasedAccess('admin'), getALLUserDetails)
+
+router.route('/admin/user/:id')
+.get(Authorization, roleBasedAccess('admin'), getSingleUserDetails)
+
+.put(Authorization, roleBasedAccess("admin"), chaneUserRole)
+
+.delete(Authorization, roleBasedAccess("admin"), deleteUser)
+
+
+
+router.route('/review').put(Authorization, createreview)
+router.route('/reviews').get(getAllreviews).delete(deleteReview)
+
+
+
+
+
+
+
+export default router;
