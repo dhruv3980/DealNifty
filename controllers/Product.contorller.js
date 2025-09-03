@@ -36,6 +36,10 @@ export const deleteProduct = asynchandler(async(req,res, next)=>{
 
 //3 controller
 export const getAllProduct = asynchandler(async(req,res, next)=>{
+
+   
+  
+  
     const resultPerPage = 3;
     const apiFeature =  new ApiFunctionality(Product.find(), req.query).search().filter()
 

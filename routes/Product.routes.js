@@ -14,7 +14,9 @@ Productrouter.route('/admin/product/:id').delete(Authorization, roleBasedAccess(
 
 Productrouter.route('/products').get(getAllProduct);
 
-Productrouter.route('/product/:id').get(Authorization, getSingleProduct);
+
+// removee auth herr
+Productrouter.route('/product/:id').get( getSingleProduct);
 
 Productrouter.route('/admin/product/:id').put(Authorization, roleBasedAccess("admin"),updatesingleproduct)
 

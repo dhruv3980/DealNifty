@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import Productrouter from "./routes/Product.routes.js";
 import User from "./routes/User.routes.js"
 import Order from "./routes/Order.routes.js";
@@ -20,8 +21,15 @@ process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
 
+const corsOptions = {
+  origin: ["http://localhost:5173"], 
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  credentials: true, 
+};
+
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors(corsOptions));
 
 app.use("/api/v1", Productrouter);
 app.use('/api/v1', User);

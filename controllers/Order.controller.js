@@ -110,7 +110,7 @@ export const updateOrderStatus = asynchandler(async(req,res,next)=>{
     if(order.orderStatus=="Delivered"){
         return next(new ApiError(404, "This order is already delivered already"))
     }
-    console.log('hello')
+   
 
     await Promise.all(order.orderItems.map(item=> updateQuantity(item.product, item.quantity)))
 
@@ -124,9 +124,11 @@ export const updateOrderStatus = asynchandler(async(req,res,next)=>{
     res.status(200).json(new ApiResponse(200, order))
 })
 
+
 async function updateQuantity(id, quantity){
-    console.log("call");
+    
     const product = await Product.findById(id);
+
     if(!product){
         return next(new ApiError(404,"Product not found "))
     }
