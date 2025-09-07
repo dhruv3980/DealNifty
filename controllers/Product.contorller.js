@@ -7,7 +7,7 @@ import ApiFunctionality from "../utils/ApiFunctionality.js";
 
 export const createProduct = asynchandler(async(req, res, next)=>{
     req.body.user = req.user.id;
-    console.log("recieved requrest")
+   
     const data = await Product.create(req.body);
 
     if(!data){
@@ -36,11 +36,9 @@ export const deleteProduct = asynchandler(async(req,res, next)=>{
 
 //3 controller
 export const getAllProduct = asynchandler(async(req,res, next)=>{
-
    
-  
-  
-    const resultPerPage = 3;
+    
+    const resultPerPage = 4;
     const apiFeature =  new ApiFunctionality(Product.find(), req.query).search().filter()
 
     // getting filtered query before pagination

@@ -1,10 +1,11 @@
 import express from "express";
 import { reqisterUser, loginUser, logoutUser, requestPasswordToken, resetPassword, getUserDetails, changePassword, updateUserProfile, getALLUserDetails, getSingleUserDetails, chaneUserRole, deleteUser, createreview, getAllreviews, deleteReview } from "../controllers/Usercontroller.js";
 import { Authorization, roleBasedAccess } from "../middlewares/Authorizationmiddleware.js";
+import upload from '../middlewares/multer.js'
 
 const router = express.Router();
 
-router.route('/registeruser').post(reqisterUser)
+router.route('/registeruser').post(upload.single("avatar"),reqisterUser)
 router.route('/login-user').post(loginUser)
 router.route('/logout-user').post(logoutUser)
 router.route('/password/forgot').get(requestPasswordToken)
