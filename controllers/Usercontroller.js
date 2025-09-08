@@ -12,11 +12,14 @@ export const reqisterUser = asynchandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   let file = req.file?.path;
 
+  const publicId ="zuauexwey2dwxwewlhxu"
+  const cloud_Name = "dn0uh6v3d"
+
   let result = await uploadOnCloudinary(file);
   if (!result) {
     result = {
       public_id: publicId,
-      url: `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.jpg`,
+      url: `https://res.cloudinary.com/${cloud_Name}/image/upload/v1755188575/Youtube/${publicId}`,
     };
   }
 
