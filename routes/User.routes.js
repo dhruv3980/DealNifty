@@ -13,7 +13,7 @@ router.route('/password/forgot').get(requestPasswordToken)
 router.route('/reset/:token').post(resetPassword)
 router.route('/profile').get(Authorization,getUserDetails)
 router.route('/password/update').post(Authorization,changePassword)
-router.route('/update/profile').post(Authorization, updateUserProfile)
+router.route('/update/profile').put(Authorization, upload.single('avatar'),updateUserProfile)
 
 
 router.route('/admin/users').get(Authorization, roleBasedAccess('admin'), getALLUserDetails)

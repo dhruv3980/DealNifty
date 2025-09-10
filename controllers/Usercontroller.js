@@ -6,13 +6,13 @@ import { jwthelper } from "../utils/JwttokenSenderhelper.js";
 import { sendEMail } from "../utils/sendMail.js";
 import crypto from "crypto";
 import Product from "../models/Product.models.js";
-import { uploadOnCloudinary } from "../utils/Cloudinary.js";
+import { uploadOnCloudinary, cloudinary } from "../utils/Cloudinary.js";
 
 export const reqisterUser = asynchandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   let file = req.file?.path;
 
-  const publicId ="zuauexwey2dwxwewlhxu"
+  const publicId =""
   const cloud_Name = "dn0uh6v3d"
 
   let result = await uploadOnCloudinary(file);
@@ -162,7 +162,7 @@ export const resetPassword = asynchandler(async (req, res, next) => {
 
 // get user details -> profile
 export const getUserDetails = asynchandler(async (req, res, next) => {
-  console.log(req.user);
+ 
   const id = req.user.id;
   if (!id) {
     return next(new ApiError(401, "unautorized access"));
@@ -222,10 +222,31 @@ export const changePassword = asynchandler(async (req, res, next) => {
 // update userprofile
 export const updateUserProfile = asynchandler(async (req, res, next) => {
   const { email, name } = req.body;
-
+  const avatar = req.file?.path;
   const options = {};
   if (email) options.email = email;
   if (name) options.name = name;
+
+  let data;
+
+  if (avatar){
+    const user1 = await User.findById(req.user.id);
+    const imageid =  user1.avatar?.public_id;
+
+    if(imageid){
+      await cloudinary.uploader.destroy(imageid)
+    }
+
+    data= await uploadOnCloudinary(avatar)
+
+    
+
+
+
+  } 
+  if(data){
+    options.avatar=data;
+  }
 
   const user = await User.findByIdAndUpdate(req.user._id, options, {
     new: true,
@@ -238,7 +259,7 @@ export const updateUserProfile = asynchandler(async (req, res, next) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "User profile updated successfully", user));
+    .json(new ApiResponse(200,user, "User profile updated successfully"));
 });
 
 // admin getting user details
