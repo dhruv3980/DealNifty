@@ -22,22 +22,20 @@ export const uploadOnCloudinary = async (localfilename) => {
       crop: "scale",
     });
 
-    if (fs.existsSync(localfilename)) {
-      fs.unlinkSync(localfilename);
+    if (fs.existsSync(absolutePath)) {
+      fs.unlinkSync(absolutePath);
     }
-
-   
 
     return { url: result.secure_url, public_id: result.public_id };
   } catch (error) {
-    console.log(error);
+    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/");
 
-    if (fs.existsSync(localfilename)) {
-      fs.unlinkSync(localfilename);
+    if (fs.existsSync(absolutePath)) {
+      fs.unlinkSync(absolutePath);
     }
 
     return null;
   }
 };
 
-export {cloudinary}
+export { cloudinary };

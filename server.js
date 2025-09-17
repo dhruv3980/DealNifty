@@ -1,14 +1,21 @@
 import express from "express";
 import cors from "cors";
 import Productrouter from "./routes/Product.routes.js";
-import User from "./routes/User.routes.js"
+import User from "./routes/User.routes.js";
 import Order from "./routes/Order.routes.js";
-import ErrorHandlemiddleware from "./middlewares/ErrorHandlemiddleware.js";
-import cookieParser from "cookie-parser";
 
+import Payment from "./routes/Payment.routes.js";
+import ErrorHandlemiddleware from "./middlewares/ErrorHandlemiddleware.js";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import Razorpay from "razorpay";
 
 const app = express();
 
+export const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET,
+});
 
 process.on("uncaughtException", (err) => {
   console.log(`Error, ${err.message}`);
@@ -22,9 +29,9 @@ process.on("unhandledRejection", (err) => {
 });
 
 const corsOptions = {
-  origin: ["http://localhost:5173"], 
-  methods: ["GET", "POST", "PUT", "DELETE"], 
-  credentials: true, 
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 };
 
 app.use(express.json());
@@ -32,8 +39,9 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 
 app.use("/api/v1", Productrouter);
-app.use('/api/v1', User);
-app.use('/api/v1', Order)
+app.use("/api/v1", User);
+app.use("/api/v1", Order);
+app.use("/api/v1", Payment);
 
 app.use(ErrorHandlemiddleware);
 

@@ -1,26 +1,46 @@
-import express from "express"
+import express from "express";
 import { Authorization } from "../middlewares/Authorizationmiddleware.js";
 import { roleBasedAccess } from "../middlewares/Authorizationmiddleware.js";
 const Productrouter = express.Router();
 
+import {
+  createProduct,
+  deleteProduct,
+  getAllProduct,
+  getSingleProduct,
+  updatesingleproduct,
+  getALLProduct,
+} from "../controllers/Product.contorller.js";
 
-import { createProduct, deleteProduct, getAllProduct, getSingleProduct, updatesingleproduct, getALLProduct  } from "../controllers/Product.contorller.js";
+Productrouter.post(
+  "/admin/product/create",
+  Authorization,
+  roleBasedAccess("admin"),
+  createProduct
+);
 
+Productrouter.route("/admin/product/:id").delete(
+  Authorization,
+  roleBasedAccess("admin"),
+  deleteProduct
+);
 
-
-Productrouter.post('/admin/product/create', Authorization, roleBasedAccess("admin"), createProduct)
-
-Productrouter.route('/admin/product/:id').delete(Authorization, roleBasedAccess("admin"),deleteProduct);
-
-Productrouter.route('/products').get(getAllProduct);
-
+Productrouter.route("/products").get(getAllProduct);
 
 // removee auth herr
-Productrouter.route('/product/:id').get( getSingleProduct);
+Productrouter.route("/product/:id").get(getSingleProduct);
 
-Productrouter.route('/admin/product/:id').put(Authorization, roleBasedAccess("admin"),updatesingleproduct)
+Productrouter.route("/admin/product/:id").put(
+  Authorization,
+  roleBasedAccess("admin"),
+  updatesingleproduct
+);
 
-Productrouter.route('/admin/products').get(Authorization, roleBasedAccess('admin'), getALLProduct)
+Productrouter.route("/admin/products").get(
+  Authorization,
+  roleBasedAccess("admin"),
+  getALLProduct
+);
 
-Productrouter.route('/review/:productid').put(Authorization, )
+Productrouter.route("/review/:productid").put(Authorization);
 export default Productrouter;

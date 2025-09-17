@@ -6,7 +6,6 @@ import crypto from "crypto";
 
 const userSchema = new mongoose.Schema(
   {
-    
     name: {
       type: String,
       required: [true, "please enter the name"],
@@ -69,10 +68,9 @@ userSchema.methods.generatejwttoken = async function () {
   );
 };
 
-userSchema.methods.checkPasswordCorrect= async function(password){
-  return  await bcrypt.compare(password, this.password);
-
-}
+userSchema.methods.checkPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 userSchema.methods.generatePasswordResetToken = function () {
   try {
@@ -90,12 +88,10 @@ userSchema.methods.generatePasswordResetToken = function () {
 
     // Return plain token (to send via email)
     return resetToken;
-    
   } catch (error) {
     throw new Error("Error generating reset password token");
   }
 };
-
 
 const User = mongoose.model("User", userSchema);
 export default User;

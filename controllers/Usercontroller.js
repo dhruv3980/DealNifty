@@ -12,8 +12,8 @@ export const reqisterUser = asynchandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   let file = req.file?.path;
 
-  const publicId =""
-  const cloud_Name = "dn0uh6v3d"
+  const publicId = "zuauexwey2dwxwewlhxu";
+  const cloud_Name = "dn0uh6v3d";
 
   let result = await uploadOnCloudinary(file);
   if (!result) {
@@ -53,6 +53,7 @@ export const loginUser = asynchandler(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select("+password");
+
   if (!user) {
     return next(new ApiError(404, "user with this email is not exist"));
   }
@@ -81,7 +82,6 @@ export const logoutUser = asynchandler(async (req, res, next) => {
 // request reset password token
 export const requestPasswordToken = asynchandler(async (req, res, next) => {
   const { email } = req.body;
-
   if (!email) {
     return next(new ApiError(400, "Please enter email"));
   }
@@ -89,16 +89,20 @@ export const requestPasswordToken = asynchandler(async (req, res, next) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return next(new ApiError(404, "Unauthorized email access"));
+    return next(new ApiError(404, "Please Enter the valid email"));
   }
 
   const token = user.generatePasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  const url = `http://localhost/ap1/v1/reset/${token}`;
-  console.log(url);
+  const url = `${process.env.FRONTEND_URL}/reset/${token}`;
 
-  const message = `Use the following link to reset your password : ${url}. \n\n This link will expires in 30 minutes.\n\n if you didnot request a password reset, please ignore this message.`;
+  const message = `
+  <p>Use the following link to reset your password:</p>
+  <p><a href="${url}" target="_blank">${url}</a></p>
+  <p>This link will expire in 30 minutes.</p>
+  <p>If you did not request a password reset, please ignore this message.</p>
+`;
 
   try {
     const options = {
@@ -157,12 +161,16 @@ export const resetPassword = asynchandler(async (req, res, next) => {
   user.password = password;
   await user.save();
 
-  await jwthelper(user, res, req, "password changed successfully");
+  return res
+    .clearCookie("token")
+    .status(200)
+    .json(
+      new ApiResponse(200, "password change", "password change successfully")
+    );
 });
 
 // get user details -> profile
 export const getUserDetails = asynchandler(async (req, res, next) => {
- 
   const id = req.user.id;
   if (!id) {
     return next(new ApiError(401, "unautorized access"));
@@ -184,7 +192,7 @@ export const getUserDetails = asynchandler(async (req, res, next) => {
 
 export const changePassword = asynchandler(async (req, res, next) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
-  console.log(oldPassword, newPassword, confirmPassword);
+  // console.log(oldPassword, newPassword, confirmPassword);
   if (oldPassword == newPassword && newPassword == confirmPassword) {
     return next(
       new ApiError(
@@ -222,30 +230,37 @@ export const changePassword = asynchandler(async (req, res, next) => {
 // update userprofile
 export const updateUserProfile = asynchandler(async (req, res, next) => {
   const { email, name } = req.body;
+
+  let user1;
   const avatar = req.file?.path;
   const options = {};
-  if (email) options.email = email;
+
+  if (email) {
+    user1 = await User.find({ email });
+
+    if (user1 && user1.length > 0) {
+      if (user1[0]._id != req.user.id) {
+        return next(new ApiError(400, "User with this email is already exist"));
+      }
+    }
+    options.email = email;
+  }
   if (name) options.name = name;
 
   let data;
 
-  if (avatar){
+  if (avatar) {
     const user1 = await User.findById(req.user.id);
-    const imageid =  user1.avatar?.public_id;
+    const imageid = user1.avatar?.public_id;
 
-    if(imageid){
-      await cloudinary.uploader.destroy(imageid)
+    if (imageid != "zuauexwey2dwxwewlhxu") {
+      await cloudinary.uploader.destroy(imageid);
     }
 
-    data= await uploadOnCloudinary(avatar)
-
-    
-
-
-
-  } 
-  if(data){
-    options.avatar=data;
+    data = await uploadOnCloudinary(avatar);
+  }
+  if (data) {
+    options.avatar = data;
   }
 
   const user = await User.findByIdAndUpdate(req.user._id, options, {
@@ -259,7 +274,7 @@ export const updateUserProfile = asynchandler(async (req, res, next) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200,user, "User profile updated successfully"));
+    .json(new ApiResponse(200, user, "User profile updated successfully"));
 });
 
 // admin getting user details
