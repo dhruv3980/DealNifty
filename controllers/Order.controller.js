@@ -8,6 +8,9 @@ import { ApiResponse } from "../utils/Apiresponse.js";
 
 // create a new order
 export const createNewOrder = asynchandler(async (req, res, next) => {
+ 
+ 
+  
   const {
     shippingInfo,
     orderItems,
@@ -18,17 +21,29 @@ export const createNewOrder = asynchandler(async (req, res, next) => {
     totalPrice,
   } = req.body;
 
-  if (
+  
+     //   !shippingPrice 
+   if (
     !shippingInfo ||
-    !orderItems ||
-    !paymentInfo ||
-    !itemPrice ||
-    !taxPrice ||
-    !shippingPrice ||
+     !orderItems ||
+     !paymentInfo ||
+     !itemPrice ||
+     !taxPrice ||
+  
     !totalPrice
-  ) {
-    return next(new ApiError(400, "All fields are required"));
-  }
+   ) {
+     return next(new ApiError(400, "All fields are required"));
+   }
+
+
+  
+
+
+if (!req.user || !req.user._id) {
+  return next(new ApiError(401, "User not authenticated"));
+}
+
+
 
   const order = await Order.create({
     shippingInfo,
@@ -39,7 +54,7 @@ export const createNewOrder = asynchandler(async (req, res, next) => {
     shippingPrice,
     totalPrice,
     paidAt: Date.now(),
-    user: req.user.id,
+    user: req.user._id,
   });
 
   if (!order) {

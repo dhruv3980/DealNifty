@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 export const Authorization = asyncHandler(async (req, res, next) => {
   const { token } = req.cookies;
 
+
+
   if (!token) {
     return next(new ApiError(401, "Unauthorized Access"));
   }
@@ -14,11 +16,13 @@ export const Authorization = asyncHandler(async (req, res, next) => {
 
   const user = await User.findById(verifyToken?.id);
 
+
   if (!user) {
-    next(new ApiError(401, "invalid token"));
+    return next(new ApiError(401, "invalid token"));
   }
 
   req.user = user;
+
   next();
 });
 

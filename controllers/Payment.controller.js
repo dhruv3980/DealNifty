@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/Apiresponse.js";
 import crypto from "crypto";
 
 export const processPayment = asynchandler(async (req, res, next) => {
-  console.log(req.body);
+  
   const options = {
     amount: Number(req.body.amount * 100),
     currency: "INR",
@@ -40,7 +40,7 @@ export const paymentVerification = asynchandler(async (req, res) => {
 
   const isAuthentic = expectedSignature === razorpay_signature;
 
-  console.log(isAuthentic, expectedSignature, razorpay_signature);
+  
 
   if (isAuthentic) {
     return res.status(200).json({
