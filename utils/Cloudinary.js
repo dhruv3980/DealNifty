@@ -38,4 +38,34 @@ export const uploadOnCloudinary = async (localfilename) => {
   }
 };
 
+
+
+export const uploadOnCloudinaryproductimage = async (localfilename) => {
+  try {
+    if (!localfilename) return null;
+
+    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/"); // fixed variable
+
+    const result = await cloudinary.uploader.upload(absolutePath, {
+      folder: "Products",
+      width: 150,
+      crop: "scale",
+    });
+
+    if (fs.existsSync(absolutePath)) {
+      fs.unlinkSync(absolutePath);
+    }
+
+    return { url: result.secure_url, public_id: result.public_id };
+  } catch (error) {
+    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/");
+
+    if (fs.existsSync(absolutePath)) {
+      fs.unlinkSync(absolutePath);
+    }
+
+    return null;
+  }
+};
+
 export { cloudinary };

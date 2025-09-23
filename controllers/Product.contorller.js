@@ -3,10 +3,30 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/Apiresponse.js";
 import asynchandler from "../middlewares/asyncHandlermiddleware.js";
 import ApiFunctionality from "../utils/ApiFunctionality.js";
+import { uploadOnCloudinaryproductimage } from "../utils/Cloudinary.js";
 // 1 conntroller
 
 export const createProduct = asynchandler(async(req, res, next)=>{
+    let image = [];
+    image = req.files;
+
+    
+
+    
+
+     // Upload all images in parallel
+    const imagelinks = await Promise.all(
+        image.map(img => uploadOnCloudinaryproductimage(img.path))
+    );
+
+    
+
     req.body.user = req.user.id;
+    req.body.images=imagelinks
+
+   
+
+    
    
     const data = await Product.create(req.body);
 
@@ -14,6 +34,7 @@ export const createProduct = asynchandler(async(req, res, next)=>{
         return next(new ApiError(401, "something wrong "))
 
     }
+
 
     return res.status(200).json(
         new ApiResponse(200, data , "product create successfully")

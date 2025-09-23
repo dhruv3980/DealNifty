@@ -125,6 +125,8 @@ export const requestPasswordToken = asynchandler(async (req, res, next) => {
   }
 });
 
+
+
 // reset password
 export const resetPassword = asynchandler(async (req, res, next) => {
   const token = req.params.token;
@@ -169,6 +171,8 @@ export const resetPassword = asynchandler(async (req, res, next) => {
     );
 });
 
+
+
 // get user details -> profile
 export const getUserDetails = asynchandler(async (req, res, next) => {
   const id = req.user.id;
@@ -187,6 +191,8 @@ export const getUserDetails = asynchandler(async (req, res, next) => {
       new ApiResponse(200, Profile, "User profile details fetched successfully")
     );
 });
+
+
 
 // changepassword
 
@@ -226,6 +232,8 @@ export const changePassword = asynchandler(async (req, res, next) => {
     .status(200)
     .json({ success: true, message: "Password updated successfully" });
 });
+
+
 
 // update userprofile
 export const updateUserProfile = asynchandler(async (req, res, next) => {
@@ -277,6 +285,8 @@ export const updateUserProfile = asynchandler(async (req, res, next) => {
     .json(new ApiResponse(200, user, "User profile updated successfully"));
 });
 
+
+
 // admin getting user details
 
 export const getALLUserDetails = asynchandler(async (req, res, next) => {
@@ -286,6 +296,8 @@ export const getALLUserDetails = asynchandler(async (req, res, next) => {
     .status(200)
     .json(new ApiResponse(200, userList, "AllUser is fetched successfully"));
 });
+
+
 
 // get single user details
 export const getSingleUserDetails = asynchandler(async (req, res, next) => {
@@ -305,6 +317,8 @@ export const getSingleUserDetails = asynchandler(async (req, res, next) => {
     .status(200)
     .json(new ApiResponse(200, user, "user detail fetched successfully"));
 });
+
+
 
 //admin change user role
 
@@ -332,6 +346,8 @@ export const chaneUserRole = asynchandler(async (req, res, next) => {
     .json(new ApiResponse(200, user, "user role is updated successfully"));
 });
 
+
+
 //admin can  delete the user
 export const deleteUser = asynchandler(async (req, res, next) => {
   const id = req.params.id;
@@ -349,6 +365,8 @@ export const deleteUser = asynchandler(async (req, res, next) => {
     .status(200)
     .json(new ApiResponse(200, [], "User deleted successully"));
 });
+
+
 
 // creating review and update
 export const createreview = asynchandler(async (req, res, next) => {

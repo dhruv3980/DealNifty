@@ -16,8 +16,8 @@ import {
 
 router.route("/new/order").post(Authorization, createNewOrder);
 router
-  .route("/admin/order/:id")
-  .get(Authorization, roleBasedAccess("admin"), getSingleOrder);
+  .route("/order/:id")
+  .get(Authorization,  getSingleOrder);
 
 router.route("/orders/user").get(Authorization, myOrder);
 
@@ -29,5 +29,8 @@ router
   .route("/admin/order/:id")
   .put(Authorization, roleBasedAccess("admin"), updateOrderStatus)
   .delete(deleteOrder);
+
+//  router.route('/order:id')
+//  .get(Authorization, getSingleOrder) 
 
 export default router;

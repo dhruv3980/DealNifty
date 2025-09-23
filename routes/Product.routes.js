@@ -2,6 +2,7 @@ import express from "express";
 import { Authorization } from "../middlewares/Authorizationmiddleware.js";
 import { roleBasedAccess } from "../middlewares/Authorizationmiddleware.js";
 const Productrouter = express.Router();
+import upload from "../middlewares/multer.js";
 
 import {
   createProduct,
@@ -16,6 +17,7 @@ Productrouter.post(
   "/admin/product/create",
   Authorization,
   roleBasedAccess("admin"),
+  upload.array('images', 5),
   createProduct
 );
 
