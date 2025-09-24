@@ -107,16 +107,24 @@ export const updatesingleproduct = asynchandler(async (req, res, next) => {
     );
   }
 
+req.body.price = Number(req.body.price);
+req.body.stock = Number(req.body.stock);
 
   let images = [];
   images = req.files? req.files:[];
+  
 
   let imagelinks = [];
 
-  if (images && images.length > 0) {
-    for (let i = 0; i < data.images?.length; i++) {
-      await cloudinary.uploader.destroy(data.images[i].public_id);
-    }
+  if (images.length > 0) {
+   // delete old images in parallel
+    await Promise.all(
+      data.images.map(img => cloudinary.uploader.destroy(img.public_id))
+    );
+
+      
+    
+     
     // upload new images
     imagelinks = await Promise.all(
       images.map(async (img) => {
@@ -127,9 +135,11 @@ export const updatesingleproduct = asynchandler(async (req, res, next) => {
 
   req.body.images = imagelinks
   req.body.user=req.user.id;
+  
 
   data = await Product.findByIdAndUpdate(id, req.body, { new: true });
 
+  
   if (!data) {
     return next(
       new ApiError(404, "something went wrong while updating the product")
