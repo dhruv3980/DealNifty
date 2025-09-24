@@ -13,6 +13,7 @@ import {
   getALLProduct,
 } from "../controllers/Product.contorller.js";
 
+// create Product
 Productrouter.post(
   "/admin/product/create",
   Authorization,
@@ -20,6 +21,8 @@ Productrouter.post(
   upload.array('images', 5),
   createProduct
 );
+
+// delete product
 
 Productrouter.route("/admin/product/:id").delete(
   Authorization,
@@ -32,12 +35,15 @@ Productrouter.route("/products").get(getAllProduct);
 // removee auth herr
 Productrouter.route("/product/:id").get(getSingleProduct);
 
+// update product
 Productrouter.route("/admin/product/:id").put(
   Authorization,
   roleBasedAccess("admin"),
+  upload.array('images', 5),
   updatesingleproduct
 );
 
+// get all products
 Productrouter.route("/admin/products").get(
   Authorization,
   roleBasedAccess("admin"),
