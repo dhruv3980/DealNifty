@@ -34,6 +34,18 @@ export const createProduct = asynchandler(async (req, res, next) => {
 export const deleteProduct = asynchandler(async (req, res, next) => {
   const id = req.params.id;
 
+  const product = await Product.findById(id);
+  if(!product){
+    return next(
+      new ApiError(404, "Product not found")
+    );
+  }
+
+  // Delete image associated with this product
+  if(product.images && product.images.length>0){
+    await Promise.all(product.images.map(img=> cloudinary.uploader.destroy(img.public_id)))
+  }
+
   const data = await Product.findByIdAndDelete(id, { new: true });
 
   if (!data) {
@@ -44,7 +56,7 @@ export const deleteProduct = asynchandler(async (req, res, next) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, data, "Successfully delete the product"));
+    .json(new ApiResponse(200, id, "Successfully delete the product"));
 });
 
 //3 controller
