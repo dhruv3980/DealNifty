@@ -352,10 +352,10 @@ export const chaneUserRole = asynchandler(async (req, res, next) => {
 
 //admin can  delete the user
 export const deleteUser = asynchandler(async (req, res, next) => {
-  // const id = req.params.id;
-  // if (!id) {
-  //   return next(new ApiError(400, "id is missing "));
-  // }
+   const id = req.params.id;
+   if (!id) {
+     return next(new ApiError(400, "id is missing "));
+   }
 
   // const user = await User.findByIdAndDelete(id);
 
@@ -366,9 +366,7 @@ export const deleteUser = asynchandler(async (req, res, next) => {
   // if (user.avatar && user.avatar?.public_id && user.avatar.public_id !== DUMMY_PUBLIC_ID) {
   //   await cloudinary.uploader.destroy(user.avatar.public_id);
   // }
-  // return res
-  //   .status(200)
-  //   .json(new ApiResponse(200, [], "User deleted successully"));
+  
 
   const user = await User.findById(id);
   if (!user) return next(new ApiError(404, "User not found"));
@@ -384,6 +382,10 @@ export const deleteUser = asynchandler(async (req, res, next) => {
 
   // delete user after cleanup
   await user.deleteOne();
+
+   return res
+    .status(200)
+    .json(new ApiResponse(200, [], "User deleted successully"));
 
 });
 
