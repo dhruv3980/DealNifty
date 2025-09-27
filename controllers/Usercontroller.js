@@ -8,6 +8,7 @@ import crypto from "crypto";
 import Product from "../models/Product.models.js";
 import { uploadOnCloudinary, cloudinary } from "../utils/Cloudinary.js";
 
+const DUMMY_PUBLIC_ID = "zuauexwey2dwxwewlhxu";
 export const reqisterUser = asynchandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   let file = req.file?.path;
@@ -199,7 +200,7 @@ export const getUserDetails = asynchandler(async (req, res, next) => {
 export const changePassword = asynchandler(async (req, res, next) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
   // console.log(oldPassword, newPassword, confirmPassword);
-  if (oldPassword == newPassword && newPassword == confirmPassword) {
+  if (oldPassword == newPassword) {  /// && newPassword == confirmPassword
     return next(
       new ApiError(
         401,
@@ -351,20 +352,39 @@ export const chaneUserRole = asynchandler(async (req, res, next) => {
 
 //admin can  delete the user
 export const deleteUser = asynchandler(async (req, res, next) => {
-  const id = req.params.id;
-  if (!id) {
-    return next(new ApiError(400, "id is missing "));
+  // const id = req.params.id;
+  // if (!id) {
+  //   return next(new ApiError(400, "id is missing "));
+  // }
+
+  // const user = await User.findByIdAndDelete(id);
+
+  // if (!user) {
+  //   return next(new ApiError(400, "User not fond "));
+  // }
+  // // delete avatar from cloudinary if it's not the dummy one
+  // if (user.avatar && user.avatar?.public_id && user.avatar.public_id !== DUMMY_PUBLIC_ID) {
+  //   await cloudinary.uploader.destroy(user.avatar.public_id);
+  // }
+  // return res
+  //   .status(200)
+  //   .json(new ApiResponse(200, [], "User deleted successully"));
+
+  const user = await User.findById(id);
+  if (!user) return next(new ApiError(404, "User not found"));
+
+  // delete avatar first
+  if (user.avatar?.public_id && user.avatar.public_id !== DUMMY_PUBLIC_ID) {
+    try {
+        await cloudinary.uploader.destroy(user.avatar.public_id);
+    } catch (err) {
+        return next(new ApiError(500, "Failed to delete user avatar from Cloudinary"));
+    }
   }
 
-  const user = await User.findByIdAndDelete(id);
+  // delete user after cleanup
+  await user.deleteOne();
 
-  if (!user) {
-    return next(new ApiError(400, "User not fond "));
-  }
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, [], "User deleted successully"));
 });
 
 
