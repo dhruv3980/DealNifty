@@ -50,6 +50,9 @@ router
   .delete(Authorization, roleBasedAccess("admin"), deleteUser);
 
 router.route("/review").put(Authorization, createreview);
-router.route("/reviews").get(getAllreviews).delete(deleteReview);
+  
+router.route("/reviews")
+  .get(Authorization, roleBasedAccess("admin"),getAllreviews)
+  .delete(Authorization, roleBasedAccess("admin"),deleteReview);
 
 export default router;

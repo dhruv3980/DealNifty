@@ -13,14 +13,17 @@ export const reqisterUser = asynchandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   let file = req.file?.path;
 
-  const publicId = "zuauexwey2dwxwewlhxu";
+  const publicId = "bh6agy15stzm77kpz3yv";
   const cloud_Name = "dn0uh6v3d";
+
+
+  //const a=https://res.cloudinary.com/dn0uh6v3d/image/upload/v1759307139/DealNifty/bh6agy15stzm77kpz3yv.jpg
 
   let result = await uploadOnCloudinary(file);
   if (!result) {
     result = {
       public_id: publicId,
-      url: `https://res.cloudinary.com/${cloud_Name}/image/upload/v1755188575/Youtube/${publicId}`,
+      url: `https://res.cloudinary.com/${cloud_Name}/image/upload/v1759307139/DealNifty/${publicId}`,
     };
   }
 
@@ -116,7 +119,7 @@ export const requestPasswordToken = asynchandler(async (req, res, next) => {
       .status(200)
       .json(new ApiResponse(200, "Reset email sent successfully"));
   } catch (err) {
-    console.log(err);
+    
     user.resetPasswordExpire = undefined;
     user.resetPasswordToken = undefined;
     await user.save({ validateBeforeSave: false });

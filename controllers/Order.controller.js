@@ -122,13 +122,14 @@ export const allOrders = asynchandler(async (req, res, next) => {
 
 export const updateOrderStatus = asynchandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
+  
 
   if (!order) {
     return next(new ApiError(400, "No order details found"));
   }
 
   if (order.orderStatus == "Delivered") {
-    return next(new ApiError(404, "This order is already delivered already"));
+    return next(new ApiError(404, "This order is already delivered "));
   }
 
   await Promise.all(
@@ -149,14 +150,15 @@ async function updateQuantity(id, quantity) {
   const product = await Product.findById(id);
 
   if (!product) {
-    return next(new ApiError(404, "Product not found "));
+    throw new Error ("Product not found ");
   }
 
   product.stock -= quantity;
   await product.save({ validateBeforeSave: false });
 }
 
-// delete order the order is deleted that one whose status is marked as delevered and this activity can perform only admin
+// delete order
+//   order is deleted that one whose status is marked as delevered and this activity can perform only admin
 
 export const deleteOrder = asynchandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
@@ -175,4 +177,4 @@ export const deleteOrder = asynchandler(async (req, res, next) => {
   return res
     .status(200)
     .json(new ApiResponse(200, "Order deleted successfully"));
-});
+  });

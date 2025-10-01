@@ -112,6 +112,7 @@ export const getSingleProduct = asynchandler(async (req, res, next) => {
 
 export const updatesingleproduct = asynchandler(async (req, res, next) => {
   const { id } = req.params;
+
   let data = await Product.findById(id);
   if (!data) {
     return next(
@@ -119,14 +120,16 @@ export const updatesingleproduct = asynchandler(async (req, res, next) => {
     );
   }
 
-req.body.price = Number(req.body.price);
-req.body.stock = Number(req.body.stock);
+  // Ensure numbers are numbers
+  if (req.body.price) req.body.price = Number(req.body.price);
+  if (req.body.stock) req.body.stock = Number(req.body.stock);
+
 
   let images = [];
   images = req.files? req.files:[];
   
 
-  let imagelinks = [];
+  let imagelinks =[];
 
   if (images.length > 0) {
    // delete old images in parallel
@@ -145,7 +148,11 @@ req.body.stock = Number(req.body.stock);
     );
   }
 
-  req.body.images = imagelinks
+  if(imagelinks.length>0){
+    req.body.images = imagelinks
+
+  }
+  
   req.body.user=req.user.id;
   
 

@@ -2,7 +2,10 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
-dotenv.config();
+
+if(process.env.NODE_ENV!='PRODUCTION'){
+ dotenv.config();
+}
 
 cloudinary.config({
   cloud_name: process.env.Cloudinary_Cloud_Name,
