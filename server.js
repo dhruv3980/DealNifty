@@ -17,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express();
+app.set("trust proxy", 1);
 
 export const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
