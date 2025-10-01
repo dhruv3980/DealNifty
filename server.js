@@ -35,7 +35,7 @@ process.on("unhandledRejection", (err) => {
 });
 
 const corsOptions = {
-  origin: ["https://68dcf7188c2f2d3575882fe1--dealnifty.netlify.app"],
+  origin: ["https://dealnifty.netlify.app/"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
