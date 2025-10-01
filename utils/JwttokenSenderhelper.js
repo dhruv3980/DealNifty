@@ -12,7 +12,7 @@ export const jwthelper = async function (
   const options = {
     httpOnly:true,
     secure:true,
-    sameSite: "lax",     
+    sameSite: "none",     
     expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
   };
 
