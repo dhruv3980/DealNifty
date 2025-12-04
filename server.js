@@ -41,11 +41,10 @@ process.on("unhandledRejection", (err) => {
 
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    callback(null, origin || "*");
-  },
-  credentials: true,
+  origin: ["https://dealnifty.netlify.app"], // no "*"
   methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(express.json());
