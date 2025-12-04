@@ -17,7 +17,9 @@ export const uploadOnCloudinary = async (localfilename) => {
   try {
     if (!localfilename) return null;
 
-    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/"); // fixed variable
+    //const absolutePath = path.resolve(localfilename).replace(/\\/g, "/"); // fixed variable
+
+     const absolutePath = path.join(process.cwd(), localfilename).replace(/\\/g, "/");
 
     const result = await cloudinary.uploader.upload(absolutePath, {
       folder: "DealNifty",
@@ -31,7 +33,9 @@ export const uploadOnCloudinary = async (localfilename) => {
 
     return { url: result.secure_url, public_id: result.public_id };
   } catch (error) {
-    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/");
+    //const absolutePath = path.resolve(localfilename).replace(/\\/g, "/");
+
+    const absolutePath = path.join(process.cwd(), localfilename).replace(/\\/g, "/");
 
     if (fs.existsSync(absolutePath)) {
       fs.unlinkSync(absolutePath);
@@ -47,7 +51,8 @@ export const uploadOnCloudinaryproductimage = async (localfilename) => {
   try {
     if (!localfilename) return null;
 
-    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/"); // fixed variable
+    //const absolutePath = path.resolve(localfilename).replace(/\\/g, "/"); // fixed variable
+    const absolutePath = path.join(process.cwd(), localfilename).replace(/\\/g, "/");
 
     const result = await cloudinary.uploader.upload(absolutePath, {
       folder: "Products",
@@ -61,7 +66,8 @@ export const uploadOnCloudinaryproductimage = async (localfilename) => {
 
     return { url: result.secure_url, public_id: result.public_id };
   } catch (error) {
-    const absolutePath = path.resolve(localfilename).replace(/\\/g, "/");
+    //const absolutePath = path.resolve(localfilename).replace(/\\/g, "/");
+    const absolutePath = path.join(process.cwd(), localfilename).replace(/\\/g, "/");
 
     if (fs.existsSync(absolutePath)) {
       fs.unlinkSync(absolutePath);

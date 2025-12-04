@@ -7,6 +7,7 @@ export const jwthelper = async function (
   req,
   message = "register user succssfully"
 ) {
+  
   const generatejwttoken = await user.generatejwttoken();
 
   const options = {
