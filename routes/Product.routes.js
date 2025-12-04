@@ -12,6 +12,7 @@ import {
   updatesingleproduct,
   getALLProduct,
 } from "../controllers/Product.contorller.js";
+import { createreview } from "../controllers/Usercontroller.js";
 
 // create Product
 Productrouter.post(
@@ -50,5 +51,5 @@ Productrouter.route("/admin/products").get(
   getALLProduct
 );
 
-Productrouter.route("/review/:productid").put(Authorization);
+Productrouter.route("/review/:productid").put(Authorization,createreview);
 export default Productrouter;
