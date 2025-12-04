@@ -50,6 +50,5 @@ Productrouter.route("/admin/products").get(
   roleBasedAccess("admin"),
   getALLProduct
 );
-
-//Productrouter.route("/review/:productid").put(Authorization,createreview);
+Productrouter.route("/review/:productid").put(Authorization,createreview);
 export default Productrouter;
