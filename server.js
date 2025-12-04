@@ -38,12 +38,15 @@ process.on("unhandledRejection", (err) => {
 const corsOptions = {
   origin: ["https://dealnifty.netlify.app"],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
+  credentials: true,allowedHeaders: ["Content-Type", "Authorization"],
+
 };
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
+
+app.options("*", cors());
 
 app.use("/api/v1", Productrouter);
 app.use("/api/v1", User);
