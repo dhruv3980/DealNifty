@@ -13,11 +13,15 @@ import Razorpay from "razorpay";
 import path from 'path'
 import { fileURLToPath } from "url";
 
+
+
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express();
 app.set("trust proxy", 1);
+console.log("Razorpay Key:", process.env.RAZORPAY_API_KEY);
 
 export const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
@@ -37,7 +41,7 @@ process.on("unhandledRejection", (err) => {
 
 const corsOptions = {
   origin: ["https://dealnifty.netlify.app"],
-  methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,allowedHeaders: ["Content-Type", "Authorization"],
 
 };
@@ -46,7 +50,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
-app.options("*", cors());
+
 
 app.use("/api/v1", Productrouter);
 app.use("/api/v1", User);
